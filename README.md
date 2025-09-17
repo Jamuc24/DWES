@@ -27,7 +27,7 @@ El proyecto se encuentra finalizado sin embargo se le dan actualizaciones consta
 El acceso al proyecto se encuentra estrictamente limitado a los ingenieros de software de microsoft por temas de seguridad y confidencialidad de los proximos contenidos y de las tecnologias propias que se incluyen.
 
 ### Tecnologias utilizadas
-Se utiliza una gran gama de tecnologias pero principalmente estan basadas en javascript para el sitio web y Phyton para la gestion de la aplicacion de escritorio.
+Se utiliza una gran gama de tecnologias pero principalmente estan basadas en javascript para el sitio web y Java para la gestion de la aplicacion de escritorio.
 
 ### Personas Contribuyentes
 No hay personas contribuyendo a este proyecto ya que es privado y no se permite intervencion de terceros.
