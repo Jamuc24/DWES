@@ -17,7 +17,7 @@
         $compratotal += $precio;
     }
 
-    //Zona de presentar por pantalla la tabla
+    //Zona de presentar por pantalla la tabla 
 
     echo "<table border='1' cellspacing='0' cellpadding='5'>";
     echo "<tr><th>articulo</th><th>precio (€)</th></tr>";
