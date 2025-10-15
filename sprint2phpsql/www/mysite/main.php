@@ -16,3 +16,22 @@ $db = mysqli_connect('localhost', 'gino', '1234', 'mysitedb') or die('No se pudo
         <h1>Conexion establecida correctamente c:</h1>
     </body>
 </html>
+
+
+<?php
+
+//Zona de desplegar la tabla
+
+    $mostrar = mysqli_query($db, "SELECT * FROM tPrimarcas") or die("no funca la consulta");
+
+    while ($linea = mysqli_fetch_array($mostrar)) {
+        echo '<div>';
+        echo '<img src="' . $linea['img'] . '" alt="' . $linea['nombre'] . '" width="100">';
+        echo '<p>' . $linea['nombre'] . ' - ' . $linea['legion'] . '</p>';
+        echo '<a href="detail.php?id=' . $linea['id'] . '">Ver detalle</a>';
+        echo '</div><hr>';
+    }
+
+    mysqli_close($db);
+?>
+
