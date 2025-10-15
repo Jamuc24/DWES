@@ -39,14 +39,19 @@ echo '<ul>';
 $query2 = "SELECT * FROM tComentarios WHERE primarca_id = $id";
 $result2 = mysqli_query($db, $query2) or die('hmmmmm algo va mal');
 
+//Zona con cambios para integrar el control de la fecha
 if (mysqli_num_rows($result2) > 0) {
     while ($comentario = mysqli_fetch_array($result2)) {
-        echo '<li>' . htmlspecialchars($comentario['comentario']) . '</li>';
+        echo '<li>';
+        echo htmlspecialchars($comentario['comentario']);
+        if (!empty($comentario['fecha'])) {
+            echo ' <small style="color:#666;">(' . $comentario['fecha'] . ')</small>';
+        }
+        echo '</li>';
     }
 } else {
     echo '<li>Aun no hay comentarios? vaya...</li>';
 }
-echo '</ul>';
 
 // Zona para desplegar el formulario
 echo '
@@ -57,6 +62,7 @@ echo '
         <input type="submit" value="Enviar comentario">
     </form>
 ';
+
 
 mysqli_close($db);
 ?>
