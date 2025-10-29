@@ -17,7 +17,6 @@ $db = mysqli_connect('localhost', 'gino', '1234', 'mysitedb') or die('No se pudo
     </body>
 </html>
 
-
 <?php
 
 //Zona de desplegar la tabla
