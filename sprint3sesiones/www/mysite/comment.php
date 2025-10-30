@@ -1,6 +1,6 @@
 <?php
-// comment.php
-$db = mysqli_connect('localhost', 'gino', '1234', 'mysitedb') or die('No se pudo conectar');
+
+$db = mysqli_connect('localhost', 'root', '1234', 'mysitedb') or die('No se pudo conectar');
 ?>
 <html>
     <body>

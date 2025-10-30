@@ -1,6 +1,6 @@
 <?php
-
-    $db = mysqli_connect('localhost', 'gino', '1234', 'mysitedb') or die('No se pudo conectar');
+    session_start();
+    $db = mysqli_connect('localhost', 'root', '1234', 'mysitedb') or die('No se pudo conectar');
 
     //Zona para recoger los datos introducios por el usuario en el formulario
     $nombre = $_POST['nombre'];
@@ -12,12 +12,12 @@
 
     //Zona para validar los campos introcidos (que se rellene el formulario entero)
     if (empty($nombre) || empty($apellidos) || empty($correo) || empty($nombre_usuario) || empty($password) || empty($confirm_password)) {
-    die('No llenaste todos los campos, cuenta no creada');
+        die('No llenaste todos los campos, cuenta no creada');
     }
 
     //Zona para controlar si las contraseñas son iguales
     if ($password !== $confirm_password) {
-    die('Las constrasennas no coinciden, cuenta no creada');
+        die('Las constrasennas no coinciden, cuenta no creada');
     }
 
     //Zona para verificar si el correo ya esta registrado
@@ -25,7 +25,7 @@
     $result_email = mysqli_query($db, $query_check_email);
 
     if (mysqli_num_rows($result_email) > 0) {
-    die('El correo que quieres registrar ya esta registrado, cuenta no creada');
+        die('El correo que quieres registrar ya esta registrado, cuenta no creada');
     }
 
     //Zona para verificar si el nombre de usuario ya esta registrado
@@ -33,23 +33,32 @@
     $result_user = mysqli_query($db, $query_check_user);
 
     if (mysqli_num_rows($result_user) > 0) {
-    die('Este nombre de usuario ya esta tomado , cuenta no creada');
+        die('Este nombre de usuario ya esta tomado , cuenta no creada');
     }
 
     //Zona para codificar la contraseña
     $password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
     //Zona para insertar en la base de datos el usuario
-    $query_insert = "INSERT INTO tUsuarios (nombre, apellidos, correo, nombre_usuario, password) 
-    VALUES ('$nombre', '$apellidos', '$correo', '$nombre_usuario', '$password_hashed')";
-    echo'Registro exisotoso Soldado, bienvenido al imperio';
-    if (mysqli_query($db, $query_insert)) {
-    
-    //Zona para regresar al main.php
-    header('Location: main.php');
+    $query_insert = "INSERT INTO tUsuarios (nombre, apellidos, correo, nombre_usuario, password) VALUES (?, ?, ?, ?, ?)";
+    $stmt_insert = $db->prepare($query_insert);
+    $stmt_insert->bind_param("sssss", $nombre, $apellidos, $correo, $nombre_usuario, $password_hashed);
+
+    if ($stmt_insert->execute()) {
+    $user_id = $stmt_insert->insert_id;
+
+    //Zona de salida por pantalla del registro correcto
+    echo 'Registro exitoso Soldado, bienvenido al imperio';
+
+    //Zona para regresar al menu principal
+    header("Refresh: 2; URL=main.php");
     } else {
-    die('hmmmmmmm algo anda mal' . mysqli_error($db));
+    die('hmmmmmmm algo anda mal: ' . $db->error);
     }
 
-    mysqli_close($db);
+    //Zona de cerrar las conexiones a la base de datos despues de usarla
+    $stmt_email->close();
+    $stmt_user->close();
+    $stmt_insert->close();
+    $db->close();
 ?>

@@ -1,6 +1,6 @@
 <?php
 // Zona de conexión a la base de datos
-$db = mysqli_connect('localhost', 'gino', '1234', 'mysitedb') or die('no se pudo conectar');
+$db = mysqli_connect('localhost', 'root', '1234', 'mysitedb') or die('no se pudo conectar');
 
 // Comprobamos que se haya pasado el id del primarca
 if (!isset($_GET['id'])) {

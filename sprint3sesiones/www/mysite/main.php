@@ -2,7 +2,7 @@
 <?php
 
 // Zona de conexion a la base de datos
-$db = mysqli_connect('localhost', 'gino', '1234', 'mysitedb') or die('No se pudo conectar a la base de datos :c');
+$db = mysqli_connect('localhost', 'root', '1234', 'mysitedb') or die('No se pudo conectar a la base de datos :c');
 ?>
 
 <!--Zona de confirmacion de la conexion a la base de datos-->
