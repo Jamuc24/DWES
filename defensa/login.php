@@ -19,7 +19,6 @@ if (mysqli_num_rows($res) > 0) {
     mysqli_stmt_close($stmt);
     mysqli_close($db);
     header('Location: /main.php');
-    exit;
   } else {
     echo '<p>Contraseña incorrecta</p><p><a href="/login.html">Volver</a></p>';
   }
