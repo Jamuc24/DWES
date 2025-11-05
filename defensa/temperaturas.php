@@ -7,7 +7,7 @@
     
      if (isset($_POST["cantidad"]) || isset($_POST["conversion"])) {
         $cantidad = $_POST["cantidad"];
-        $conversion = isset($_POST["conversion"]) ? $_POST["conversion"] : "";
+        $conversion = isset($_POST["conversion"])  $_POST["conversion"] : "";
 
         if (empty($cantidad)) {
           echo "Debes introducir una cantidad.<br>";
