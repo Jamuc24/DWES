@@ -1,14 +1,13 @@
 import random
 
-reintentar = True  # Debe empezar en True para jugar al menos una vez
-
-while reintentar:  # Solo la condición, sin :False
+reintentar = True  
+while reintentar:  
     
     # Zona de presentar el juego
     print("Bienvenido a adivina el numero, donde... adivinas el numero")
     print("Elige la dificultad:")
 
-    # Elegir dificultad
+    #Zona para elegir dificultad
     while True:
         print("1 - Facil")
         print("2 - Intermedio") 
@@ -34,8 +33,6 @@ while reintentar:  # Solo la condición, sin :False
     # Zona de generar numero secreto y los intentos
     numero_secreto = random.randint(1, max_numero)
     intentos = 0
-
-    print(f"\n¡He pensado un número entre 1 y {max_numero}!")
 
     # Zona del juego principal
     while True:
