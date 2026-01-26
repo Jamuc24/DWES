@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from .models import Superviviente
+from .serializers import SupervivienteSerializer
 
 # ============================================
 # VISTA 1: SOLO PARA LISTAR (GET todos)
@@ -17,27 +18,10 @@ class SupervivienteListView(APIView):
         """Obtener todos los supervivientes - JSON MANUAL"""
         supervivientes = Superviviente.objects.all()
         
-        data = []
-        for superviviente in supervivientes:
-            superviviente_dict = {
-                'id': superviviente.usuario.id,
-                'nombre': superviviente.nombre,
-                'apellido': superviviente.apellido,
-                'numero_vault': superviviente.numero_vault,
-                'nivel': superviviente.nivel,
-                'caps': superviviente.caps,
-                'salud': superviviente.salud,
-                'radiacion': superviviente.radiacion,
-                'fecha_creacion': superviviente.fecha_creacion,
-                'fecha_actualizacion': superviviente.fecha_actualizacion,
-                'esta_sano': superviviente.esta_sano,
-                'nombre_mostrado': superviviente.nombre_mostrado,
-                'necesita_medicina': superviviente.necesita_medicina,
-            }
-            data.append(superviviente_dict)
+        #Serializador propio de la vista
+        serializer = SupervivienteSerializer(supervivientes, many=True)
         
-        return Response(data)
-
+        return Response(serializer.data)
 
 # ============================================
 # VISTA 2: SOLO PARA CREAR (POST)
