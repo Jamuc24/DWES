@@ -1,11 +1,12 @@
-# fallout/urls.py
+
 from django.urls import path
 from .views import (
     SupervivienteListView,
     SupervivienteCreateView,
     SupervivienteDetailView,
     SupervivienteUpdateView,
-    SupervivienteDeleteView
+    SupervivienteDeleteView,
+    ObjetoListView
 )
 
 urlpatterns = [
@@ -23,4 +24,7 @@ urlpatterns = [
     
     # DELETE: Eliminar un superviviente específico
     path('api/supervivientes/<int:pk>/eliminar/', SupervivienteDeleteView.as_view(), name='superviviente-delete'),
+
+    #GET: Visualizar los objetos
+    path('api/objetos/', ObjetoListView.as_view(), name='objeto-list'),
 ]

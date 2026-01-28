@@ -80,3 +80,15 @@ def create(self, validated_data):
         
         # Llamar al create original de ModelSerializer (guarda el Superviviente)
         return super().create(validated_data)
+
+class ObjetoSerializer(serializers.ModelSerializer):
+    """Serializador para el modelo Objeto (armas, armaduras, medicina, etc.)"""
+    class Meta:
+        model = Objeto
+        fields = '__all__'
+    
+    def validate_valor(self, value):
+        """El valor no puede ser negativo"""
+        if value < 0:
+            raise serializers.ValidationError("El valor no puede ser negativo")
+        return value

@@ -5,6 +5,8 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from .models import Superviviente
 from .serializers import SupervivienteSerializer
+from .models import Objeto  
+from .serializers import ObjetoSerializer 
 
 # ============================================
 # VISTA 1: SOLO PARA LISTAR (GET todos)
@@ -204,3 +206,15 @@ class SupervivienteDeleteView(APIView):
             {"mensaje": f"Superviviente '{nombre_mostrado}' eliminado exitosamente"},
             status=status.HTTP_200_OK
         )
+    
+# ============================================
+# VISTA 6: HECHA PARA LOS OBJETOS
+# ============================================
+
+class ObjetoListView(APIView):
+    """ Vista para listar objetos (prueba del segundo serializador)"""
+    
+    def get(self, request):
+        objetos = Objeto.objects.all()
+        serializer = ObjetoSerializer(objetos, many=True)
+        return Response(serializer.data)
