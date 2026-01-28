@@ -32,142 +32,47 @@ class SupervivienteCreateView(APIView):
     """
     
     def post(self, request):
-        """Crear un nuevo superviviente - VALIDACIÓN MANUAL"""
-        data = request.data
+        """Crear un nuevo superviviente - CON SERIALIZADOR"""
+        serializer = SupervivienteSerializer(data=request.data)
         
-        errores = []
+        if serializer.is_valid():
         
-        # Validar campos requeridos
-        if 'usuario' not in data:
-            errores.append("El campo 'usuario' es requerido")
-        elif not User.objects.filter(id=data['usuario']).exists():
-            errores.append(f"El usuario con ID {data['usuario']} no existe")
-        
-        if 'nombre' not in data or not data['nombre']:
-            errores.append("El campo 'nombre' es requerido")
-            
-        # Validar rango de salud
-        if 'salud' in data:
-            try:
-                salud = int(data['salud'])
-                if salud < 0 or salud > 100:
-                    errores.append("La salud debe estar entre 0 y 100")
-            except ValueError:
-                errores.append("La salud debe ser un número entero")
-        
-        # Validar rango de radiación
-        if 'radiacion' in data:
-            try:
-                radiacion = int(data['radiacion'])
-                if radiacion < 0 or radiacion > 100:
-                    errores.append("La radiación debe estar entre 0 y 100")
-            except ValueError:
-                errores.append("La radiación debe ser un número entero")
-        
-        # Validar rango de nivel
-        if 'nivel' in data:
-            try:
-                nivel = int(data['nivel'])
-                if nivel < 1 or nivel > 50:
-                    errores.append("El nivel debe estar entre 1 y 50")
-            except ValueError:
-                errores.append("El nivel debe ser un número entero")
-        
-        if errores:
-            return Response(
-                {"errores": errores},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        try:
-            usuario = User.objects.get(id=data['usuario'])
-            
-            if Superviviente.objects.filter(usuario=usuario).exists():
-                return Response(
-                    {"error": "Ya existe un superviviente para este usuario"},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            
-            superviviente = Superviviente.objects.create(
-                usuario=usuario,
-                nombre=data.get('nombre', ''),
-                apellido=data.get('apellido', ''),
-                numero_vault=data.get('numero_vault', '101'),
-                nivel=int(data.get('nivel', 1)),
-                caps=int(data.get('caps', 100)),
-                salud=int(data.get('salud', 100)),
-                radiacion=int(data.get('radiacion', 0)),
-            )
-            
-            response_data = {
-                'id': superviviente.usuario.id,
-                'nombre': superviviente.nombre,
-                'apellido': superviviente.apellido,
-                'numero_vault': superviviente.numero_vault,
-                'nivel': superviviente.nivel,
-                'caps': superviviente.caps,
-                'salud': superviviente.salud,
-                'radiacion': superviviente.radiacion,
-                'fecha_creacion': superviviente.fecha_creacion,
-                'esta_sano': superviviente.esta_sano,
-                'nombre_mostrado': superviviente.nombre_mostrado,
-                'necesita_medicina': superviviente.necesita_medicina,
-                'mensaje': 'Superviviente creado exitosamente'
-            }
-            
-            return Response(response_data, status=status.HTTP_201_CREATED)
-            
-        except User.DoesNotExist:
-            return Response(
-                {"error": "El usuario especificado no existe"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        except Exception as e:
-            return Response(
-                {"error": str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            superviviente = serializer.save()
 
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED
+            )
+        
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 # ============================================
 # VISTA 3: SOLO PARA DETALLE (GET por ID)
 # ============================================
+
 class SupervivienteDetailView(APIView):
     """
     Vista SOLO para obtener un superviviente específico (GET por ID)
     """
     
     def get(self, request, pk):
-        """Obtener un superviviente por ID - JSON MANUAL"""
+        """Obtener un superviviente por ID - CON SERIALIZADOR"""
         try:
-            # Buscar por el id del usuario (porque Superviviente usa usuario como PK)
             superviviente = Superviviente.objects.get(usuario__id=pk)
             
-            # Construir respuesta manualmente
-            data = {
-                'id': superviviente.usuario.id,
-                'nombre': superviviente.nombre,
-                'apellido': superviviente.apellido,
-                'numero_vault': superviviente.numero_vault,
-                'nivel': superviviente.nivel,
-                'caps': superviviente.caps,
-                'salud': superviviente.salud,
-                'radiacion': superviviente.radiacion,
-                'fecha_creacion': superviviente.fecha_creacion,
-                'fecha_actualizacion': superviviente.fecha_actualizacion,
-                'esta_sano': superviviente.esta_sano,
-                'nombre_mostrado': superviviente.nombre_mostrado,
-                'necesita_medicina': superviviente.necesita_medicina,
-            }
+            # ¡Solo 1 línea con serializador!
+            serializer = SupervivienteSerializer(superviviente)  # SIN many=True
             
-            return Response(data)
+            return Response(serializer.data)
             
         except Superviviente.DoesNotExist:
             return Response(
                 {"error": "Superviviente no encontrado"},
                 status=status.HTTP_404_NOT_FOUND
             )
-
 
 # ============================================
 # VISTA 4: SOLO PARA ACTUALIZAR (PUT)

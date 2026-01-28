@@ -53,3 +53,30 @@ class SupervivienteSerializer(serializers.ModelSerializer):
         if value < 1 or value > 50:
             raise serializers.ValidationError("El nivel debe estar entre 1 y 50")
         return value
+    
+def create(self, validated_data):
+        """
+        Sobrescribimos el método create para manejar la creación de usuario
+        si no se proporciona uno
+        """
+        # Si no viene usuario en los datos validados, creamos uno automático
+        if 'usuario' not in validated_data:
+            from django.contrib.auth.models import User
+            import time
+            
+            # Generar nombre de usuario único basado en timestamp
+            timestamp = int(time.time())
+            username = f"jugador_{timestamp}"
+            
+            # Crear usuario automático
+            usuario = User.objects.create_user(
+                username=username,
+                password='temp_password_123',  # Contraseña temporal
+                email=f'{username}@ejemplo.com'
+            )
+            
+            # Añadir el usuario a los datos validados
+            validated_data['usuario'] = usuario
+        
+        # Llamar al create original de ModelSerializer (guarda el Superviviente)
+        return super().create(validated_data)
