@@ -1,30 +1,9 @@
-
-from django.urls import path
-from .views import (
-    SupervivienteListView,
-    SupervivienteCreateView,
-    SupervivienteDetailView,
-    SupervivienteUpdateView,
-    SupervivienteDeleteView,
-    ObjetoListView
-)
+# wasteland/urls.py - VERSIÓN BLOQUE 3 (ViewSets + Routers)
+from django.urls import path, include
+from .routers import router  # Importamos el router que creaste
 
 urlpatterns = [
-    # GET: Listar todos los supervivientes
-    path('api/supervivientes/', SupervivienteListView.as_view(), name='superviviente-list'),
-    
-    # POST: Crear un nuevo superviviente
-    path('api/supervivientes/crear/', SupervivienteCreateView.as_view(), name='superviviente-create'),
-    
-    # GET: Ver un superviviente específico
-    path('api/supervivientes/<int:pk>/', SupervivienteDetailView.as_view(), name='superviviente-detail'),
-    
-    # PUT: Actualizar un superviviente específico
-    path('api/supervivientes/<int:pk>/actualizar/', SupervivienteUpdateView.as_view(), name='superviviente-update'),
-    
-    # DELETE: Eliminar un superviviente específico
-    path('api/supervivientes/<int:pk>/eliminar/', SupervivienteDeleteView.as_view(), name='superviviente-delete'),
-
-    #GET: Visualizar los objetos
-    path('api/objetos/', ObjetoListView.as_view(), name='objeto-list'),
+    # ¡SOLO ESTA LÍNEA REEMPLAZA TODAS LAS ANTERIORES!
+    # Incluye TODAS las rutas generadas automáticamente por el router
+    path('api/', include(router.urls)),
 ]
